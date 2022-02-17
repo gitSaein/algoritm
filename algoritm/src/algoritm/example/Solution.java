@@ -1,9 +1,7 @@
 package algoritm.example;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+import java.util.stream.Collectors;
 
 // 각 기능의 진도가 100%일 때, 서비스에 반영 가능
 // 먼저 배포가 되어야 하는 순서대로 작업의 진도가 적힌 정수 배열
@@ -13,7 +11,8 @@ public class Solution {
     //
 
     public int[] solution(int[] progresses, int[] speeds) {
-        int[] answer = new int[progresses.length];
+        ArrayList<Integer> answer = new ArrayList<>();
+        Queue<Integer> range = new LinkedList<>();
 
         if(progresses.length <= 100 && speeds.length <= 100){
             Queue<Integer> queue = new LinkedList<>();
@@ -38,40 +37,38 @@ public class Solution {
             }while (queue.size() != progresses.length);
 
 
-                 // 2, 3, 5, 0, 1, 4
-            if (!queue.isEmpty()) {
-                int min = 0;
-                boolean ok = true;
-                int aIdx = 0;
+            // 2, 3, 5, 0,1 4
+            int min = 0;
+            int totalCnt = 0;
+            do{
                 int cnt = 0;
-                Queue<Integer> q = new LinkedList<>();
-                do{
-                    int cur = queue.peek();
-
-                    if(min == cur){
-                        do{
-                            cnt += 1;
-                            min += 1;
-                        }while (min == cur);
+                if(min == queue.peek()){
+                    queue.poll();
+                    cnt += 1;
+                    totalCnt++;
+                    while(range.contains(min + 1)) {
+                        cnt++;
+                        min++;
+                        totalCnt++;
                     }
+                    answer.add(cnt);
 
-                    answer[aIdx] = cnt;
-
-
-
-                }while (ok);
-
-                queue.clear();
-            }
+                    min++;
+                } else {
+                    range.add(queue.poll());
+                }
+            }while(totalCnt != progresses.length);
 
         }
 
-        return answer;
+
+
+        return answer.stream().filter(t-> t>0).mapToInt(i->i).toArray();
     }
 
     public static void main(String[] args) {
-        int arr1[] = {95, 90, 99, 99, 80, 99};
-        int arr2[] = {1, 1, 1, 1, 1, 1};
+        int arr1[] = {93, 30, 55};
+        int arr2[] = {1, 30, 5};
         Solution sort = new Solution();
 
         System.out.println(Arrays.toString(sort.solution(arr1, arr2)));
