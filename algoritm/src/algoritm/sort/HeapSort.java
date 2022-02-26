@@ -1,4 +1,4 @@
-package com.company;
+package algoritm.sort;
 
 public class HeapSort {
 
@@ -12,11 +12,11 @@ public class HeapSort {
             }
 
             // 왼쪽   자식 노드  p*2 + 1
-            if (arr[pIdx] < arr[lIdx]) {
+            if (arr.length > lIdx && arr[pIdx] < arr[lIdx]) {
                 pIdx = lIdx;
             }
             // 오른쪽 자식 노드   p*2 + 2
-            if (arr[pIdx] < arr[rIdx]) {
+            if (arr.length > rIdx && arr[pIdx] < arr[rIdx]) {
                 pIdx = rIdx;
             }
 
@@ -29,21 +29,28 @@ public class HeapSort {
         arr[tIdx] = tmp;
         return arr;
     }
+    
+    public static int[] makeHeap(int[] arr, int length) {
+    	// 힙 만들
+	    for (int i = 0; i < length / 2; i++) {
+	    	int pIdx = descHeap(arr, i);
+	        arr = swap(arr, i, pIdx);
+	    }
+	    return arr;
+    }
 
     public static void main(String[] args){
-        int []arr = {7,6,5,8,4,5,3};
+        int []arr = {10,9,5,8,3,2,4,6,7,1};
 
-        // 부모노드  (자식 노드 - 1) / 2
-        int pIdx;
-        int largest;
-        do {
-            pIdx = 0;
-            for (int i = 0; i < arr.length / 2; i++) {
-                largest = descHeap(arr, i);
-                swap(arr, i, pIdx);
-            }
-        }while(pIdx != 0);
-        //부모 노드와 자식 노드 비교
+        arr = makeHeap(arr, arr.length);
+
+        
+	    // 힙 정렬 
+	    for(int i = arr.length-1; i > 0; i--) {
+	    	arr = swap(arr, 0, i);
+	        arr = makeHeap(arr, i-1);
+	    	
+	    }
 
         for(int j: arr){
             System.out.printf("%d, ", j);
