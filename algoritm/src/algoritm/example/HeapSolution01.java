@@ -2,6 +2,7 @@ package algoritm.example;
 import java.util.PriorityQueue;
 
 
+// 문제: https://programmers.co.kr/learn/courses/30/lessons/42626
 public class HeapSolution01 {
     public int solution(int[] scoville, int K) {
 
